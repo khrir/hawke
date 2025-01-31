@@ -1,0 +1,111 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block content %}
+
+<div class="bg-white w-11/12 p-5 rounded-xl">
+    <h2 class="text-2xl">Sobre o evento</h2>
+    <p class="text-gray-500">Informe os dados do evento</p>
+
+    <div class="form my-5 p-5 border rounded-2xl">
+        <form action="/admin/new-event" method="post">
+            <div class="mt-5">
+                <label for="name" class="block">Name</label>
+                <input type="text" name="name" id="name" class="w-full p-2 border border-gray-300 rounded" />
+            </div>
+            <div class="mt-5">
+                <label for="description" class="block">Description</label>
+                <textarea name="description" id="description" class="w-full p-2 border border-gray-300 rounded"></textarea>
+            </div>
+            <div class="mt-5 flex">
+                <div class="start-date w-auto mr-10">
+                    <label for="date" class="block">Start Date</label>
+                    <input type="date" name="start_date" id="start_date" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+                <div class="end-date w-auto">
+                    <label for="date" class="block">End Date</label>
+                    <input type="date" name="end_date" id="end_date" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+            </div>
+            <div class="address grid grid-cols-2">
+                <div class="mt-5 w-11/12">
+                    <label for="zip_code" class="block">Zip code</label>
+                    <input type="text" name="zip_code" id="zip_code" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+                <div class="mt-5 w-11/12">
+                    <label for="local" class="block">Local</label>
+                    <input type="text" name="local" id="local" class="w-full p-2 border border-gray-300 rounded"/>
+                </div>
+                <div class="mt-5 w-11/12">
+                    <label for="street" class="block">Street</label>
+                    <input type="text" name="street" id="street" class="w-full p-2 border cursor-not-allowed border-gray-300 rounded"/>
+                </div>
+                <div class="mt-5 w-11/12">
+                    <label for="neighborhood" class="block">Neighborhood</label>
+                    <input type="text" name="neighborhood" id="neighborhood" class="w-full p-2 border cursor-not-allowed border-gray-300 rounded"/>
+                </div>
+                <div class="mt-5 w-11/12">
+                    <label for="city" class="block">City</label>
+                    <input type="text" name="city" id="city" class="w-full p-2 border cursor-not-allowed border-gray-300 rounded"/>
+                </div>
+                <div class="mt-5 w-11/12">
+                    <label for="state" class="block">State</label>
+                    <input type="text" name="state" id="state" class="w-full p-2 border cursor-not-allowed border-gray-300 rounded"/>
+                </div>
+            </div>
+            <div class="mt-5">
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        let form = $(this);
+        let url = form.attr('action');
+        let data = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = '/admin';
+                } else {
+                    $('.error').addClass('hidden');
+                    for (let key in response.errors) {
+                        $(`#${key}`).next().text(response.errors[key]).removeClass('hidden');
+                    }
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    });
+
+    $('#zip_code').blur(function() {
+        let cep = $(this).val();
+        getAddress(cep);
+    });
+
+    function getAddress(cep) {
+        $.ajax({
+            url: `https://viacep.com.br/ws/${cep}/json/`,
+            type: 'GET',
+            success: function(data) {
+                $('#street').val(data.logradouro);
+                $('#neighborhood').val(data.bairro);
+                $('#city').val(data.localidade);
+                $('#state').val(data.estado);
+            }
+        });
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% set ticket_lot_id = 12 %}
+<!-- {% for ticket_lot in ticket_lots  %}
+    <div class="ticket-lot-item border-gray-300 flex p-5 border-b">
+        <div class="info">
+            <h3 class="text-orange-500 text-lg">{{ticket_lot.name}}</h3>
+            <p class="text-orange-400 text-sm">{{ticket_lot.description}}</p>
+            <p class="text-orange-400 text-sm">{{ticket_lot.price}}</p>
+        </div>
+        <input type="radio" value="{{ticket_lot_id}}" data-price="{{ticket_lot.price}}"  name="lote" id="lote" class="lote w-6">
+    </div>
+{% endfor %} -->
+<div class="hidden event-step step-1 ticket-lot-item flex flex-col cursor-pointer flex p-5">
+    <div id="ticket-lot" class="cell block mx-auto w-11/12 mt-3 py-5 px-10 rounded-2xl hover:bg-gray-100">
+        <div class='flex justify-between'>
+            <div>
+                <h3 class="text-orange-500 text-lg">Teste de Lote</h3>
+                <p class="text-orange-400 text-sm">Grátis</p>
+                <p id="lot_value" class="text-orange-400 text-sm">R$ 0,00</p>
+            </div>
+            <input type="radio" value="{{ticket_lot_id}}" data-price="0"  name="lote" id="lote" class="lote w-6">
+        </div>
+    </div>
+</div> <!-- ticket-lot-item -->

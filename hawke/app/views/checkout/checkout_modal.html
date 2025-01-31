@@ -1,0 +1,223 @@
+<div class="hidden flex justify-end w-full min-h-screen fixed" id="checkout"
+    style="background: rgba(0, 0, 0, 0.1); z-index: 100;">
+    <div class="w-4/6 flex min-h-screen" id="checkout-content">
+        <div class="ticket-lot bg-white w-3/5 p-5">
+            {% include 'checkout/breadcrumb.html' %}
+
+            <div class="title border-gray-300 border-b mt-5">
+                <h2 class="text-xl text-center text-orange-500">Select your
+                    Ticket Lot</h2>
+                <p class="text-orange-400 text-center text-sm my-2">Choose the
+                    ticket lot that best fits your needs</p>
+            </div>
+            <div class="content">
+                <form action="/subscribe" method="post">
+                    <div class="subs">
+                        {% include 'elements/checkout/ticket.html' %}
+                        {% include 'elements/checkout/order.html' %}
+                        {% include 'elements/checkout/success.html' %}
+                    </div>
+                    <span class="error hidden text-sm text-red-500"></span>
+                </form>
+            </div>
+        </div>
+        <div class="preview bg-gray-200 w-2/5 p-5">
+            <div>
+                <span
+                    class="exit font-bold text-xl absolute right-5 top-3 rounded hover:bg-gray-300 w-6 cursor-pointer leading-6 text-center text-orange-400 h-6">X</span>
+                <div class="title border-gray-300 border-b">
+                    <h2
+                        class="text-xl text-center text-bold mb-2 text-orange-500">{{event.name}}</h2>
+                </div>
+                <div class="border-b border-gray-300 mt-5">
+                    <div class="date flex items-center">
+                        <i class="fas fa-calendar text-orange-400"></i>
+                        <p
+                            class="text-orange-400 text-md ml-5">{{dateInterval}}</p>
+                    </div>
+                    <div class="address flex items-center mt-5 mb-2">
+                        <i class="fa-solid fa-location-dot text-orange-400"></i>
+                        <p class="text-orange-400 text-sm ml-5">{{link}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="resume mt-5">
+                <h2 class="text-orange-500 capitalize">Resumo do pedido</h2>
+
+                <div class="lotes border-b border-gray-300 mt-3 ml-2"></div>
+
+                <div class="total mt-5">
+                    <h3 class="text-orange-500">Total</h3>
+                    <p id="total-value" class="text-orange-400">R$ 0,00</p>
+                </div>
+            </div>
+            <div class="actions mt-5">
+                <button
+                    class="bg-orange-500 text-white p-2 rounded w-full">Continuar</button>
+            </div>
+            <div id="wallet_container"></div>
+        </div>
+    </div>
+</div>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+<script>
+    let step = 1;
+    const mp = new MercadoPago('{{public_key}}', {
+        locale: 'pt-BR'
+    });
+    const bricksBuilder = mp.bricks();
+
+    $('#checkout').ready(function() {
+        changeStep(1);
+        console.log('checkout ready');
+    });
+
+    $('.exit').on('click', function() {
+        $('#checkout').addClass('hidden');
+        step = 1;
+    });
+
+    $('#checkout').on('click', function(e) {
+        if(e.target.id == 'checkout' && e.target.id != 'checkout-content') {
+            $('#checkout').addClass('hidden');
+            step = 1;
+        }
+    });
+
+    $('.cell').on('click', function() {
+        let radio = $(this).find('input[type="radio"]');
+        radio.prop('checked', true);
+        radio.trigger('change');
+
+        let lote = {
+            name: $(this).find('h3').text(),
+            quantity: 1,
+            price: $(this).find('p').last().text()
+        };
+        
+        changeTotalValue(lote.price);
+
+        if($('.lotes').find('h2').text() != lote.name) {
+            appendLote(lote);
+        }
+    });
+
+    function changeTotalValue(price) {
+        let total = $('#total-value');
+        total.text(price);
+    }
+
+    $('input[type="radio"]').change(function() {
+        let radio = $(this);
+        
+        if(radio.is(':checked')) {
+            radio.parent().parent().addClass('bg-gray-100');
+        } else {
+            radio.parent().parent().removeClass('bg-gray-100');
+        }
+    });
+
+    function appendLote(lote) {
+        let lotes = $('.lotes');
+        let item = `<h2 class="text-orange-400 text-md">${lote.name}</h2>
+                    <div class="flex justify-between text-sm mb-2">
+                        <p class="text-orange-400">(${lote.price} x ${lote.quantity})</p> 
+                        <p class="text-orange-400">${lote.price}</p>
+                    </div>`;
+        lotes.append(item);
+    }
+
+    $('.actions button').on('click', function() {
+        if(step == 1 && !validateLote()) return;
+        if(step == 2 && !validateOrder()) return;
+
+        step++;
+        if(step == 3) sendOrder();
+
+        changeStep(step);
+
+        if(step == 2) {
+            $('.actions button').text('Finalizar');
+        }
+
+        if(step == 3) {
+            $('.actions button').addClass('hidden');
+        }
+    });
+
+    function changeStep(step) {
+        let steps = ['step-1', 'step-2', 'step-3'];
+
+        if (step > 3) step = 3;
+
+        steps.forEach((s) => {
+            if(s == `step-${step}`) {
+                $(`.${s}`).removeClass('hidden');
+                $(`.breadcrumb-item-${s}`).find('.item').css('background-color', 'orange');
+                $(`.breadcrumb-item-${s}`).find('.txt').css('color', 'orange');                
+            } else {
+                $(`.${s}`).addClass('hidden');
+                $(`.breadcrumb-item-${s}`).find('.item').css('background-color', 'whitesmoke');
+                $(`.breadcrumb-item-${s}`).find('.txt').css('color', 'whitesmoke');              }
+        });
+    }
+
+    function validateLote() {
+        let lote = $('input[name="lote"]:checked').val();
+
+        if(lote == undefined) {
+            $('.error').text('Selecione um lote').removeClass('hidden');
+            return false;
+        }
+
+        $('.error').addClass('hidden');
+        return true;
+    }
+
+    function validateOrder() {
+        let username = $('#username').val();
+        let email = $('#email').val();
+
+        if(!isValidUsername(username)) return false;
+        if(!isValidEmail(email)) return false;
+
+        $('.error').addClass('hidden');
+        return true;
+    }
+
+    function isValidUsername(username) {
+        if (username.split(" ").length < 2) {
+            $('#username').next().text('Informe o nome completo').removeClass('hidden');
+            return false;
+        }
+
+        $('#username').next().addClass('hidden');
+        return true;
+    }
+
+    function isValidEmail(email) {
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            $('#email').next().text('Email inválido').removeClass('hidden');
+            return false;
+        }
+
+        $('#email').next().addClass('hidden');
+        return true;   
+    }
+
+    function sendOrder() {
+        let form = $('form');
+        let url = form.attr('action');
+        let data = form.serialize();
+
+        $.post(url, data, function(response) {
+            if(response.success) {
+                $('.success').removeClass('hidden');
+            } else {
+                $('.error').text('Ocorreu um erro ao processar o pedido').removeClass('hidden');
+            }
+        });
+    }
+</script>

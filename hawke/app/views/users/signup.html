@@ -1,0 +1,149 @@
+{% extends 'layouts/form.html' %}
+
+{% block content %}
+
+<section class="signup bg-white w-96 p-9 rounded-3xl">
+    <div class="logo flex justify-center">
+        <a href="/"><img src="static/img/hawke.svg" style="width: 120px;" alt="Hawke" /></a>
+    </div>
+    <div class="form my-5">
+        <form action="/user" method="post">
+            <div class="form-group mb-4">
+                <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Nome *</label>
+                <input type="text" name="username" id="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <span class="error hidden text-sm text-red-500"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email *</label>
+                <input type="email" name="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <span class="error hidden text-sm text-red-500"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password *</label>
+                <input type="password" name="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <span class="error hidden text-sm text-red-500"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label for="password_confirmation" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password *</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <span class="error hidden text-sm text-red-500"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        let form = $(this);
+        let url = form.attr('action');
+        let data = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = '/signin';
+                } else {
+                    $('.error').addClass('hidden');
+                    for (let key in response.errors) {
+                        if (response.errors.hasOwnProperty(key)) {
+                            let error = response.errors[key];
+                            $('#' + key).next('.error').text(error).removeClass('hidden');
+                        }
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                if (error === 'BAD REQUEST') {
+                    let response = JSON.parse(xhr.responseText);
+                    $('.error').addClass('hidden');
+                    for (let key in response.errors) {
+                        if (response.errors.hasOwnProperty(key)) {
+                            let error = response.errors[key];
+                            $('#' + key).next('.error').text(error).removeClass('hidden');
+                        }
+                    }
+                } else {
+                    alert("Houve um problema ao processar sua solicitação. Tente novamente mais tarde.");
+                }
+            }
+        });
+    });
+
+    function validateForm() {
+        let isValid = true;
+        let username = $('#username').val();
+        let email = $('#email').val();
+        let password = $('#password').val();
+        let password_confirmation = $('#password_confirmation').val();
+
+        if(!isValidUsername(username))
+            isValid = false;
+
+        if(!isValidEmail(email))
+            isValid = false;
+
+        if(!isValidPassword(password))
+            isValid = false;
+
+        if(!isValidPasswordConfirmation(password, password_confirmation))
+            isValid = false;
+        
+        return isValid;
+    }
+
+    function isValidUsername(username) {
+        if (username.split(" ").length < 2) {
+            $('#username').next().text('Informe o nome completo').removeClass('hidden');
+            return false;
+        }
+
+        $('#username').next().addClass('hidden');
+        return true;
+    }
+
+    function isValidEmail(email) {
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            $('#email').next().text('Email inválido').removeClass('hidden');
+            return false;
+        }
+
+        $('#email').next().addClass('hidden');
+        return true;   
+    }
+
+    function isValidPassword(password) {
+        if (password.length < 5) {
+            $('#password').next().text('A senha deve ter no mínimo 5 caracteres').removeClass('hidden');
+            return false;
+        }
+
+        $('#password').next().addClass('hidden');
+        return true;
+    }
+
+    function isValidPasswordConfirmation(password, password_confirmation) {
+        if (password !== password_confirmation) {
+            $('#password_confirmation').next().text('As senhas não conferem').removeClass('hidden');
+            return false;
+        }
+
+        $('#password_confirmation').next().addClass('hidden');
+        return true;
+    }
+</script>
+
+{% endblock %}

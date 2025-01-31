@@ -1,0 +1,42 @@
+<header class="flex flex-col p-5">
+    <div id="user" class="flex justify-end">
+        <div id="clickavel" class="w-40 flex justify-end">
+            <div id="profile" class="flex items-center mr-5 cursor-pointer">
+                <img src="/static/img/profile.png" alt="" style="width: 40px;">
+                <p class="ml-2">{{user.username}}</p>
+                <i class="fa fa-chevron-down ml-2"></i>
+            </div>
+            <div id="profile-dropdown" class="hidden absolute right-9 w-36 top-16 mt-2 bg-white p-5 text-gray-500 text-md shadow shadow-outter">
+                <ul>
+                    <li class="mt-2 hover:bg-gray-100"><a href="#">Profile</a></li>
+                    <li class="mt-2 hover:bg-gray-100"><a href="#">Help</a></li>
+                    <li class="mt-2 hover:bg-gray-100"><a href="/admin/my-events">My events</a></li>
+                    <li class="mt-2 hover:bg-gray-100"><a href="#">Settings</a></li>
+                    <li class="mt-2 hover:bg-gray-100"><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="welcome flex justify-start">
+        <h3><span class="font-bold">Welcome back, </span>{{user.username}}</h3>
+    </div>
+    <hr class="my-3 h-0.5 border-t-0" style="background: rgba(187, 187, 187, 0.1);" />
+</header>
+
+<script>
+    $(document).ready(function() {
+        $('#profile').click(function() {
+            if($('#profile-dropdown').hasClass('hidden')) {
+                $('#profile-dropdown').removeClass('hidden');
+            } else {
+                $('#profile-dropdown').addClass('hidden');
+            }
+        });
+
+        $(document).click(function(e) {
+            if(!$(e.target).closest('#clickavel').length) {
+                $('#profile-dropdown').addClass('hidden');
+            }
+        });
+    });
+</script>

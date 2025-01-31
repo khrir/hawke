@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawke - Event Management Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-[Poppins]">
+    <header class="fixed w-full bg-white/80 backdrop-blur-md z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-gray-800">Hawke</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-600 hover:text-amber-500 transition">Events</a>
+                <a href="#" class="text-gray-600 hover:text-amber-500 transition">About</a>
+                <a href="#" class="text-gray-600 hover:text-amber-500 transition">Contact</a>
+            </div>
+            <a class="bg-amber-500 text-white px-6 py-2 rounded-full hover:bg-amber-600 transition shadow-lg" href="/login">Login</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="pt-32 pb-20 px-4">
+            <div class="container mx-auto text-center">
+                <h2 class="text-5xl md:text-7xl font-bold text-gray-800 mb-6">Experience Events<br/>Like Never Before</h2>
+                <p class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">Transform your virtual events into unforgettable experiences with Hawke's innovative platform.</p>
+                <button class="bg-amber-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-600 transition shadow-xl hover:scale-105 transform duration-300">Get Started Now</button>
+            </div>
+        </section>
+
+        <section class="py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+            <div class="container mx-auto px-4">
+                <h3 class="text-3xl font-bold text-gray-800 mb-12">Trending Events</h3>
+                <div class="flex overflow-x-auto pb-8 space-x-6 scroll-smooth" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+                    <div class="flex-none w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1 duration-300" style="scroll-snap-align: start;">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87" alt="Tech Conference" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <span class="text-amber-500 font-semibold">Tech</span>
+                            <h4 class="text-xl font-bold mb-2">Future of AI Summit</h4>
+                            <p class="text-gray-600 mb-4">Virtual Conference • Dec 15</p>
+                            <button class="w-full bg-gray-100 text-gray-800 py-2 rounded-full hover:bg-amber-500 hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1 duration-300" style="scroll-snap-align: start;">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7" alt="Music Festival" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <span class="text-amber-500 font-semibold">Music</span>
+                            <h4 class="text-xl font-bold mb-2">Global Music Fest</h4>
+                            <p class="text-gray-600 mb-4">Live Stream • Dec 20</p>
+                            <button class="w-full bg-gray-100 text-gray-800 py-2 rounded-full hover:bg-amber-500 hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1 duration-300" style="scroll-snap-align: start;">
+                        <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754" alt="Business Workshop" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <span class="text-amber-500 font-semibold">Business</span>
+                            <h4 class="text-xl font-bold mb-2">Leadership Summit</h4>
+                            <p class="text-gray-600 mb-4">Workshop • Dec 25</p>
+                            <button class="w-full bg-gray-100 text-gray-800 py-2 rounded-full hover:bg-amber-500 hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1 duration-300" style="scroll-snap-align: start;">
+                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94" alt="Art Exhibition" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <span class="text-amber-500 font-semibold">Art</span>
+                            <h4 class="text-xl font-bold mb-2">Digital Art Expo</h4>
+                            <p class="text-gray-600 mb-4">Virtual Gallery • Dec 28</p>
+                            <button class="w-full bg-gray-100 text-gray-800 py-2 rounded-full hover:bg-amber-500 hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1 duration-300" style="scroll-snap-align: start;">
+                        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3" alt="Gaming Tournament" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <span class="text-amber-500 font-semibold">Gaming</span>
+                            <h4 class="text-xl font-bold mb-2">ESports Championship</h4>
+                            <p class="text-gray-600 mb-4">Live Stream • Dec 30</p>
+                            <button class="w-full bg-gray-100 text-gray-800 py-2 rounded-full hover:bg-amber-500 hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1 duration-300" style="scroll-snap-align: start;">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7" alt="Fashion Show" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <span class="text-amber-500 font-semibold">Fashion</span>
+                            <h4 class="text-xl font-bold mb-2">Winter Collection Launch</h4>
+                            <p class="text-gray-600 mb-4">Virtual Show • Jan 5</p>
+                            <button class="w-full bg-gray-100 text-gray-800 py-2 rounded-full hover:bg-amber-500 hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h5 class="text-2xl font-bold mb-4">Hawke</h5>
+                    <p class="text-gray-400">Making virtual events extraordinary</p>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4">Quick Links</h6>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-amber-500 transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition">Events</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4">Newsletter</h6>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full w-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <button class="bg-amber-500 px-6 rounded-r-full hover:bg-amber-600 transition">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

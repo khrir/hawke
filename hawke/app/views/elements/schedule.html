@@ -1,0 +1,13 @@
+<div class="main flex">
+    {% for activity in activities %}
+    <div class="activity p-4 bg-white shadow shadow-xl border border-orange-500 p-5 rounded-2xl">
+        <div class="activity-header">
+            <h4 class="text-orange-400 text-sm text-center">{{ activity.start_date }}</h3>
+            <p class="text-orange-500 text-xl capitalize">{{ activity.name }}</p>
+        </div>
+        <div class="activity-body text-orange-400 text-md">
+            <p>{{ activity.description }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>

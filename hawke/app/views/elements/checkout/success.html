@@ -1,0 +1,26 @@
+{% set pix_key = '82981650294' %}
+{% set valor = 0 %}
+{% set qr_code = 'https://doity.com.br/api/qrcode?data=15&size=150' %}
+
+<div id="success" class="hidden event-step step-3 p-10">
+    {% if valor > 0 %}
+        <h2 class="text-orange-400 text-2xl">Efetue o pagamento para confirmar a inscrição</h2>
+        <div id="payment" class="bg-gray-100 p-5 rounded-2xl mt-5">
+            <div id="pix">
+                <div id="copy-and-paste">
+                    <h3 class="text-orange-400 text-lg">Chave PIX</h3>
+                    <p class="text-orange-400 text-sm mt-2">Copie e cole a chave PIX abaixo para efetuar o pagamento</p>
+                    <p class="mt-2" style="word-break: break-all;"> {{pix_key}} </p>
+                </div>
+                <div id="qr-code" class="mt-5 flex justify-center">
+                    <img src="{{qr_code}}" alt="QR Code">
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="bg-gray-100 p-5 rounded-2xl">
+            <h2 class="text-orange-400 text-2xl">Inscrição confirmada!</h2>
+            <p class="text-orange-400 text-md mt-2">Você receberá um e-mail com as informações da inscrição</p>
+        </div>
+    {% endif %}
+</div>

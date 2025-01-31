@@ -1,0 +1,86 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block content %}
+
+<div class="bg-white w-11/12 p-5 rounded-xl">
+    <h2 class="text-2xl">Sobre a Atividade</h2>
+    <p class="text-gray-500">Informe os dados da atividade</p>
+
+    <div class="form my-5 p-5 border rounded-2xl">
+        <form action="{{ url_for('admin.activity_create', id=event.id) }}" method="post" >
+            <div class="mt-5">
+                <label for="name" class="block">Name</label>
+                <input type="text" name="name" id="name" class="w-full p-2 border border-gray-300 rounded" />
+            </div>
+            <div class="mt-5">
+                <label for="description" class="block">Description</label>
+                <textarea name="description" id="description" class="w-full p-2 border border-gray-300 rounded"></textarea>
+            </div>
+            <div class="mt-5">
+                <label for="speaker_email" class="block">Speaker E-mail</label>
+                <input type="email" name="speaker_email" id="speaker_email" class="w-full p-2 border border-gray-300 rounded" />
+            </div>
+            <div class="mt-5 grid grid-cols-2">
+                <div class="start-date w-11/12">
+                    <label for="start_date" class="block">Start Date</label>
+                    <input type="date" name="start_date" id="start_date" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+                <div class="end-date w-11/12">
+                    <label for="end_date" class="block">End Date</label>
+                    <input type="date" name="end_date" id="end_date" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+                <div class="start-time w-11/12 mt-5">
+                    <label for="start_time" class="block">Start Time</label>
+                    <input type="time" name="start_time" id="start_time" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+                <div class="end-time w-11/12 mt-5">
+                    <label for="end_time" class="block">End Time</label>
+                    <input type="time" name="end_time" id="end_time" class="w-full p-2 border border-gray-300 rounded" />
+                </div>
+            </div>
+            <div class="hidden mt-5">
+                <label for="price" class="block">price</label>
+                <input type="number" value="0" name="price" id="price" class="w-full p-2 border border-gray-300 rounded" />
+            </div>
+            <div class="hidden mt-5">
+                <label for="event_id" class="block">Event ID</label>
+                <input type="number" value="{{event.id}}" name="event_id" id="event_id" class="w-full p-2 border border-gray-300 rounded" />
+            </div>
+            <div class="mt-5">
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        let form = $(this);
+        let url = form.attr('action');
+        let data = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = "{{ url_for('admin.activity_view', id=event.id) }}";
+                } else {
+                    $('.error').addClass('hidden');
+                    for (let key in response.errors) {
+                        $(`#${key}`).next().text(response.errors[key]).removeClass('hidden');
+                    }
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+<aside class="bg-white w-1/6 mt-5 p-5">
+    <div class="logo flex justify-center">
+        <a href="/"><img src="/static/img/hawke.svg" style="width: 120px;" alt="Hawke" /></a>
+    </div>
+    <div class="items text-left mt-5">
+        <div class="home text-gray-500">
+            <i class="fa fa-home"></i>
+            <a href="{{url_for('admin.admin')}}">Home</a>
+        </div>
+        <div class="events mt-3 text-gray-500">
+            <i class="fa fa-edit"></i>
+            <a href="{{ url_for('admin.event_edit', id=event.id) }}">Edit</a>
+        </div>
+        <div class="activities mt-3 text-gray-500">
+            <i class="fa fa-plus"></i>
+            <a href="{{ url_for('admin.activity_create', id=event.id) }}">Activities</a>
+        </div>
+    </div>
+</aside>

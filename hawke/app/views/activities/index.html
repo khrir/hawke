@@ -1,0 +1,135 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block content %}
+
+<section class="activities bg-white w-11/12 p-5 rounded-xl">
+    <h1 class="text-2xl">Lista de Atividades</h1>
+    <p class="text-gray-500">Atividades adicionadas no evento #{{event.name}}</p>
+
+    <div class="mt-5" style="overflow-x: scroll;">
+        <table>
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 p-2">Id</th>
+                    <th class="border border-gray-300 p-2">Name</th>
+                    <th class="border border-gray-300 p-2">Description</th>
+                    <th class="border border-gray-300 p-2">Start date</th>
+                    <th class="border border-gray-300 p-2">End date</th>
+                    <th class="border border-gray-300 p-2">Start time</th>
+                    <th class="border border-gray-300 p-2">End time</th>
+                    <th class="border border-gray-300 p-2">Price</th>
+                    <th class="border border-gray-300 p-2">Active</th>
+                    <th class="border border-gray-300 p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td class="border border-gray-300 p-2">{{ activity.id }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.name }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.description }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.start_date }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.end_date }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.start_time }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.end_time }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.price }}</td>
+                    <td class="border border-gray-300 p-2">{{ activity.active }}</td>
+                    <td class="border border-gray-300 p-2">
+                        <a id="edit-{{activity.id}}" href="#" class="text-blue-500 edit-btn" data-id="{{activity.id}}">
+                            <i class="edit fa fa-edit"></i>
+                        </a>
+                        <a id="delete" class="text-red-500">
+                            <i class="delete fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    $('.edit-btn').click(function(e) {
+        e.preventDefault();
+
+        let row = $(this).closest('tr');
+        let activityId = $(this).data('id');
+        let name = row.find('td:nth-child(2)');
+        let description = row.find('td:nth-child(3)');
+        let startDate = row.find('td:nth-child(4)');
+        let endDate = row.find('td:nth-child(5)');
+        let startTime = row.find('td:nth-child(6)');
+        let endTime = row.find('td:nth-child(7)');
+        let price = row.find('td:nth-child(8)');
+        let active = row.find('td:nth-child(9)');
+        let actions = row.find('td:nth-child(10)');
+
+        name.html('<input type="text" value="' + name.text().trim() + '" class="edit-name bg-gray-100"/>');
+        description.html('<input type="text" value="' + description.text().trim() + '" class="edit-description bg-gray-100"/>');
+        startDate.html('<input type="date" value="' + startDate.text().trim() + '" class="edit-start-date bg-gray-100"/>');
+        endDate.html('<input type="date" value="' + endDate.text().trim() + '" class="edit-end-date bg-gray-100"/>');
+        startTime.html('<input type="time" value="' + startTime.text().trim() + '" class="edit-start-time bg-gray-100"/>');
+        endTime.html('<input type="time" value="' + endTime.text().trim() + '" class="edit-end-time bg-gray-100"/>');
+        price.html('<input type="number" value="' + price.text().trim() + '" class="edit-price bg-gray-100"/>');
+        active.html('<select class="edit-active bg-gray-100"><option value="1">Yes</option><option value="0">No</option></select>');
+
+        actions.html('<a href="#" class="text-green-500 save-btn" data-id="' + activityId + '"><i class="fa fa-save"></i></a>');
+
+        $('.save-btn').click(function(e) {
+            e.preventDefault();
+
+            let updatedName = row.find('.edit-name').val();
+            let updatedDescription = row.find('.edit-description').val();
+            let updatedStartDate = row.find('.edit-start-date').val();
+            let updatedEndDate = row.find('.edit-end-date').val();
+            let updatedStartTime = row.find('.edit-start-time').val();
+            let updatedEndTime = row.find('.edit-end-time').val();
+            let updatedPrice = row.find('.edit-price').val();
+            let updatedActive = row.find('.edit-active').val();
+
+            let data = {
+                id: activityId,
+                name: updatedName,
+                description: updatedDescription,
+                start_date: updatedStartDate,
+                end_date: updatedEndDate,
+                start_time: updatedStartTime,
+                end_time: updatedEndTime,
+                price: updatedPrice,
+                active: updatedActive
+            };
+
+            $.ajax({
+                url: "/admin/activities/" + activityId + "/edit",
+                method: 'POST',
+                data: data,
+                success: function(response) {
+                    name.html(updatedName);
+                    description.html(updatedDescription);
+                    startDate.html(updatedStartDate);
+                    endDate.html(updatedEndDate);
+                    startTime.html(updatedStartTime);
+                    endTime.html(updatedEndTime);
+                    price.html(updatedPrice);
+                    active.html(updatedActive == 'Yes' ? 1 : 0);
+
+                    actions.html(`
+                        <a id="edit-${activityId}" href="#" class="text-blue-500 edit-btn" data-id="${activityId}">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="#" class="text-red-500">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    `);
+                },
+                error: function(error) {
+                    alert('Ocorreu um erro ao salvar os dados!');
+                }
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

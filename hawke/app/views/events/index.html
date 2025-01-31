@@ -1,0 +1,59 @@
+{% extends 'layouts/default.html' %}
+{% set dateInterval = "Uma tabaca" %}
+{% set timeInterval = "Ahora" %}
+{% set city = address.city %}
+{% set local = address.local %}
+{% set step = 1 %}
+
+{% block content %}
+
+<div class="p-5 rounded-xl my-10">
+    <div class="title text-center">
+        <h1 class="text-6xl capitalize text-orange-400">{{event.name}}</h1>
+
+        <div class="redirect-btn text-white mt-10 h-auto flex flex-col justify-center items-center">
+            <a class="bg-orange-400 shadow shadow-xl rounded-xl flex items-center justify-center w-1/5 h-11" href="#">Subscribe</a>
+        </div>
+    </div>
+
+    <div class="flex justify-center mt-10 w-full">
+        {% include 'elements/event_info.html' %}
+    </div>
+
+    <div class="flex justify-center mt-10 w-full" id="about">
+        <div class="content w-3/5">
+            <h2 class="text-3xl text-center text-orange-500 mb-3 relative after:block after:w-20 after:h-[5px] after:bg-orange-500 after:mt-2 after:mx-auto after:text-center">About</h2>
+            <p class="text-orange-400 text-justify mt-5">{{event.description}}</p>
+        </div>
+    </div>
+
+    <div class="bg-orange-400 rounded-full w-16 h-16 text-center text-white shadow shadow-xl" style="position: fixed; z-index: 10; display: block; right: 10px; bottom: 10px;">
+        <a class="py-3" href="https://expedia.com/" style="line-height: 4rem;" target="_blank" rel="noopener noreferrer">Hotels</a>
+    </div>
+    
+    <div class="flex justify-center mt-10 w-full" id="schedule">
+        <div>
+            <h2 class="text-3xl text-center text-orange-500 mb-3 relative after:block after:w-20 after:h-[5px] after:bg-orange-500 after:mt-2 after:mx-auto after:text-center">Schedule</h2>
+
+            {% if activities %}
+                {% include 'elements/schedule.html' %}
+            {% endif %}
+
+            {% if not activities %}
+                <p class="mt-5 text-orange-400">No activities available</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="local">
+        {% include 'elements/map_stay22.html' %}
+    </div>
+</div>
+
+<script>
+    $('.redirect-btn a').click(function() {
+        $('#checkout').removeClass('hidden');
+    });
+</script>
+
+{% endblock %}
